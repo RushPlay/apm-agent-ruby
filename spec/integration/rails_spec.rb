@@ -143,6 +143,18 @@ if enabled
       end
     end
 
+    context 'utf-8 headers' do
+      let(:header_value) { (+'Malmö').force_encoding('ASCII-8BIT') }
+
+      it 'does not crash' do
+        get '/', {}, { 'HTTP_GEOIP_CITY' => header_value }
+
+        expect {
+          EventCollector.wait_for transactions: 1, spans: 2
+        }.not_to raise_error
+      end
+    end
+
     describe 'transactions' do
       context 'when a simple request is made' do
         it 'spans action and posts it' do
