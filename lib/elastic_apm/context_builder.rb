@@ -93,9 +93,9 @@ module ElasticAPM
         next unless key == key.upcase
 
         if key.start_with?('HTTP_')
-          http[camel_key(key)] = value
+          http[camel_key(key)] = value.dup.force_encoding('utf-8')
         else
-          env[key] = value
+          env[key] = value.dup.force_encoding('utf-8')
         end
       end
     end
